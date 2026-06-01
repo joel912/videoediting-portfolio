@@ -18,7 +18,15 @@ import { EXQUISITE_PROJECTS } from './data';
 
 export default function App() {
   const [backgroundMusicActive, setBackgroundMusicActive] = useState(false);
+  const [showAudioBlockedBanner, setShowAudioBlockedBanner] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Set default soothing volume level
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.45;
+    }
+  }, []);
 
   // Scroll handler with offset support for rounded overlays
   const scrollToSection = (sectionId: string) => {
@@ -37,12 +45,18 @@ export default function App() {
       audioRef.current.pause();
       setBackgroundMusicActive(false);
     } else {
+      audioRef.current.volume = 0.45;
       audioRef.current.play()
         .then(() => {
           setBackgroundMusicActive(true);
+          setShowAudioBlockedBanner(false);
         })
-        .catch(() => {
-          alert("Ambient player was blocked. Please tap once the interface to authorize audio playback.");
+        .catch((err) => {
+          console.warn("Autoplay block detected:", err);
+          setShowAudioBlockedBanner(true);
+          setTimeout(() => {
+            setShowAudioBlockedBanner(false);
+          }, 6000);
         });
     }
   };
@@ -53,7 +67,7 @@ export default function App() {
       {/* Background ambient music tag */}
       <audio 
         ref={audioRef}
-        src="https://assets.mixkit.co/music/preview/mixkit-cinematic-epic-dawn-2621.mp3"
+        src="https://assets.mixkit.co/music/preview/mixkit-sleepy-cat-135.mp3"
         loop
       />
 
@@ -257,6 +271,36 @@ export default function App() {
 
         </div>
       </footer>
+
+      {/* Floating Audio Status Toast */}
+      {backgroundMusicActive && (
+        <div className="fixed bottom-6 left-6 z-50 bg-[#111113]/95 backdrop-blur-md border border-white/10 px-4 py-2.5 rounded-sm shadow-2xl flex items-center gap-3 font-mono text-[10px] text-white/90 animate-fade-in animate-[bounce_3s_infinite_ease-in-out]">
+          <div className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+            <span className="text-white font-bold uppercase font-mono">AMBIENT STATE:</span>
+          </div>
+          <span className="text-white/60">"Sleepy Cat" — Chill Lofi ♫</span>
+        </div>
+      )}
+
+      {/* Floating Audio Block Toast */}
+      {showAudioBlockedBanner && (
+        <div className="fixed bottom-6 left-6 z-50 bg-black/95 backdrop-blur-md border border-white/20 p-4 rounded-sm shadow-2xl flex flex-col gap-2 font-mono text-[10px] text-white max-w-xs animate-fade-in">
+          <div className="flex items-center gap-2 text-white font-extrabold uppercase tracking-wider">
+            <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+            <span>STREAM BLOCKED BY BROWSER</span>
+          </div>
+          <p className="text-[9.5px] text-white/60 leading-normal font-sans">
+            Your browser prevented autoplay. Tap anywhere on the portfolio workspace first to grant license, then click the speaker again to play.
+          </p>
+          <button 
+            onClick={() => setShowAudioBlockedBanner(false)}
+            className="text-[8px] text-white/40 hover:text-white underline cursor-pointer text-left uppercase tracking-widest mt-1 font-mono hover:font-bold"
+          >
+            Acknowledge
+          </button>
+        </div>
+      )}
 
     </div>
   );

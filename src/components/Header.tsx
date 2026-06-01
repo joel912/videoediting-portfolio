@@ -78,10 +78,15 @@ export default function Header({ onScrollToSection, backgroundMusicActive, toggl
 
         <div className="flex items-center gap-3">
           {/* Sound Mood Player Indicator */}
+          {backgroundMusicActive && (
+            <span className="hidden leading-none xs:block font-mono text-[9px] text-white/40 tracking-wider animate-pulse max-w-[150px] truncate mr-1">
+              ♫ SLEEPY CAT (LOFI)
+            </span>
+          )}
           <button
             onClick={toggleMusic}
             className="w-9 h-9 rounded-md bg-[#161618] hover:bg-[#222225] flex items-center justify-center text-white/60 hover:text-white border border-white/5 transition-colors focus:outline-none"
-            title={backgroundMusicActive ? "Mute Ambient Foley SFX" : "Unmute Ambient Foley SFX"}
+            title={backgroundMusicActive ? "Pause Aesthetic Chill Lofi" : "Play Aesthetic Chill Lofi ♫"}
           >
             {backgroundMusicActive ? (
               <div className="flex items-end gap-[2px] h-3 px-1">
