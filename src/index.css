@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+
+@theme {
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --color-brand: #FF4A1C; /* Cinematic Safety Orange */
+  --color-brand-neon: #FF6B3E;
+}
+
+/* Custom scrollbar matching cinematic style */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #060608;
+}
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #FF4A1C;
+}
+
+/* Simulated visual tape/reels animation ticker */
+@keyframes scrollLeft {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-ticker {
+  display: flex;
+  width: max-content;
+  animation: scrollLeft 28s linear infinite;
+}
+
+.ticker-container {
+  overflow: hidden;
+  width: 100%;
+}
